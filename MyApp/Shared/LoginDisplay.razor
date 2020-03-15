@@ -1,0 +1,23 @@
+@inject NavigationManager Navigation;
+
+
+<AuthorizeView>
+    <Authorized>
+            <a class="nav-link" href="/logout">Logout</a>
+    </Authorized>
+    <NotAuthorized>
+            <a class="nav-link" href="/Login?redirect=@GetRedirectUrl()">Login</a>
+    </NotAuthorized>
+</AuthorizeView> 
+
+@code {
+    private string GetRedirectUrl()
+    {
+        var returnUrl = Navigation.ToBaseRelativePath(Navigation.Uri);
+
+        if (string.IsNullOrWhiteSpace(returnUrl))
+            return "/";
+        else
+            return $"{returnUrl}";
+    }
+}

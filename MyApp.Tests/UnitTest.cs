@@ -13,7 +13,7 @@ namespace MyApp.Tests
         public UnitTest()
         {
             appHost = new BasicAppHost().Init();
-            appHost.Container.AddTransient<MyServices>();
+            appHost.Container.AddTransient<ForecastService>();
         }
 
         [OneTimeTearDown]
@@ -22,7 +22,7 @@ namespace MyApp.Tests
         [Test]
         public void Can_call_MyServices()
         {
-            var service = appHost.Container.Resolve<MyServices>();
+            var service = appHost.Container.Resolve<ForecastService>();
 
             var response = (HelloResponse)service.Any(new Hello { Name = "World" });
 

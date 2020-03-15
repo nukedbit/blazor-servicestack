@@ -1,16 +1,14 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Funq;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ServiceStack;
-using MyApp.ServiceInterface;
-using MyApp.ServiceModel;
 
 namespace MyApp
 {
@@ -18,45 +16,18 @@ namespace MyApp
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseModularStartup<Startup>()
-                .UseUrls(Environment.GetEnvironmentVariable("ASPNETCORE_URLS") ?? "http://localhost:5000/")
-                .Build();
-
-            host.Run();
+            CreateWebHostBuilder(args).Build().Run();
         }
+
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => {
+                    webBuilder.UseModularStartup<Startup, StartupActivator>();
+                });
     }
 
-    public class Startup : ModularStartup
+    public class StartupActivator : ModularStartupActivator
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public new void ConfigureServices(IServiceCollection services)
-        {
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseServiceStack(new AppHost());
-
-            app.Run(context =>
-            {
-                context.Response.Redirect("/metadata");
-                return Task.FromResult(0);
-            });
-        }
-    }
-
-    public class AppHost : AppHostBase
-    {
-        public AppHost()
-            : base("MyApp", typeof(MyServices).Assembly) { }
-
-        public override void Configure(Container container)
-        {
-        }
+        public StartupActivator(IConfiguration configuration) : base(configuration) { }
     }
 }

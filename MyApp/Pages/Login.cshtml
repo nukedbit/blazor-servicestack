@@ -1,0 +1,43 @@
+@page "/login"
+@model MyApp.Pages.Login
+
+@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="_content/MyApp/css/bootstrap.min.css" />
+<link rel="stylesheet" href="_content/MyApp/css/login.css" />
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Sign In</h5>
+                        <form class="form-signin" action="/auth/credentials" method="post">
+                            <div class="form-label-group">
+                                <input type="email" id="userName" name="userName" class="form-control" 
+                                       placeholder="Email address" required autofocus value="test@ssblazor.ss">
+                                <input type="hidden" id="redirect" name="redirect" value="@Model.Redirect" />
+                                <label for="userName">Email address</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Password" 
+                                       required value="p@33wOrd">
+                                <label for="password">Password</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input" id="rememberMe" name="rememberMe">
+                                <label class="custom-control-label" for="rememberMe">Remember password</label>
+                            </div>
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
