@@ -9,6 +9,10 @@ There is also a ServiceStackAuthenticationStateProvider which enable direct inte
 
 As an example i have converted the Forecast Service class in a ServiceStack Service which require authentication, so when you navigate to Fetch Data page it require you to login with the sample user.
 
+
+![](https://raw.githubusercontent.com/nukedbit/blazor-servicestack/master/blazor-servicestack.jpg)
+
+
 > Browse [source code]https://github.com/nukedbit/blazor-servicestack/), and install with [dotnet-new](https://docs.servicestack.net/dotnet-new):
 
     $ dotnet tool install -g x
