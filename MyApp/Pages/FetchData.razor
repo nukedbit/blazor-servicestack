@@ -1,5 +1,4 @@
 ﻿@page "/fetchdata"
-@inherits ServiceStackComponentBase
 @using MyApp.ServiceModel
 @using MyApp.ServiceModel.Types
 @using ServiceStack
@@ -43,9 +42,14 @@ else
 @code {
     private List<WeatherForecast> forecasts = new List<WeatherForecast>();
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState {get;set;}    
+
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Gateway.SendAsync(new GetWeatherForecast()
+        var state = await AuthenticationState;
+        var client = state.ToClient();
+        forecasts = await client.GetAsync(new GetWeatherForecast()
         {
             StartDate = DateTime.Now
         });

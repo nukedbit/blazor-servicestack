@@ -5,7 +5,7 @@
 
 # Custom
 dist/
-
+.history/
 # User-specific files
 *.suo
 *.user
