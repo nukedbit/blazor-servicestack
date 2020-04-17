@@ -4,8 +4,9 @@
 
 Based on [selfhost template](https://github.com/NetCoreTemplates/selfhost)
 
-This Template Provide a **ServiceStackComponentBase** you can set your razor components to inherit from it, this way you can access IServiceGateway to call your ServiceStack Services from your components and also a Db property to access OrmLite Directly if you wish to do so.
-There is also a ServiceStackAuthenticationStateProvider which enable direct integration of ServiceStack Authentication System replacing the asp.net one so you don't require to use entityframework for authentication.
+This Template is pre configured to work with ServiceStack, it provide an extension method which allow you to make authenticated call using a ServiceStack client.
+
+This project use ServiceStack integrated authentication bridged over asp.net auth, so it can work seamless with asp.net core.
 
 As an example i have converted the Forecast Service class in a ServiceStack Service which require authentication, so when you navigate to Fetch Data page it require you to login with the sample user.
 
