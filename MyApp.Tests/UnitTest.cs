@@ -3,6 +3,9 @@ using ServiceStack;
 using ServiceStack.Testing;
 using MyApp.ServiceInterface;
 using MyApp.ServiceModel;
+using System;
+using System.Collections.Generic;
+using MyApp.ServiceModel.Types;
 
 namespace MyApp.Tests
 {
@@ -24,9 +27,9 @@ namespace MyApp.Tests
         {
             var service = appHost.Container.Resolve<ForecastService>();
 
-            var response = (HelloResponse)service.Any(new Hello { Name = "World" });
+            var response = (List<WeatherForecast>)service.Any(new GetWeatherForecast { StartDate = DateTime.Now });
 
-            Assert.That(response.Result, Is.EqualTo("Hello, World!"));
+            Assert.That(response.Count, Is.EqualTo(5));
         }
     }
 }
