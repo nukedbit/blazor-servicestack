@@ -20,6 +20,6 @@ namespace MyApp.Pages
         }
 
         [BindProperty(SupportsGet = true)]
-        public string Redirect { get; set; }
+        public new string Redirect { get; set; }
     }
 }
