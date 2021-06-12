@@ -3,7 +3,6 @@
 @using MyApp.ServiceModel.Types
 @using ServiceStack
 @attribute [Authorize(Roles = "Admin")]
-@inject AuthenticationStateProvider AuthenticationStateProvider;
 
 <h1>Logged Clicks</h1>
 
@@ -63,7 +62,7 @@ else
         try
         {
             ErrorMessage = null;
-            var response = await this.GetServiceStackClient(AuthenticationStateProvider).PostAsync(new QueryLogClicks());
+            var response = await this.GetServiceStackClient(await AuthenticationState).PostAsync(new QueryLogClicks());
             records = response.Results;
         }
         catch (Exception ex)
@@ -79,9 +78,9 @@ else
         {
             ErrorMessage = null;
 
-            await this.GetServiceStackClient(AuthenticationStateProvider).PostAsync(new CreateLogClick());
+            await this.GetServiceStackClient(await AuthenticationState).PostAsync(new CreateLogClick());
 
-            var response = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync(new QueryLogClicks());
+            var response = await this.GetServiceStackClient(await AuthenticationState).GetAsync(new QueryLogClicks());
             records = response.Results;
         }
         catch (Exception ex)
@@ -95,9 +94,9 @@ else
         try
         {
             ErrorMessage = null;
-            await this.GetServiceStackClient(AuthenticationStateProvider).PostAsync(new CreateLogClickRequireFakeRole());
+            await this.GetServiceStackClient(await AuthenticationState).PostAsync(new CreateLogClickRequireFakeRole());
 
-            var response = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync(new QueryLogClicks());
+            var response = await this.GetServiceStackClient(await AuthenticationState).GetAsync(new QueryLogClicks());
             records = response.Results;
         }catch(Exception ex)
         {
@@ -110,9 +109,9 @@ else
         try
         {
             ErrorMessage = null;
-            await this.GetServiceStackClient(AuthenticationStateProvider).DeleteAsync(new ClearAllLogClick());
+            await this.GetServiceStackClient(await AuthenticationState).DeleteAsync(new ClearAllLogClick());
 
-            var response = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync(new QueryLogClicks());
+            var response = await this.GetServiceStackClient(await AuthenticationState).GetAsync(new QueryLogClicks());
             records = response.Results;
         }catch(Exception ex)
         {

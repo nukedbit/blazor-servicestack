@@ -27,6 +27,20 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Autocrud
             </NavLink>
         </li>
+
+        <li class="nav-item px-3">
+            @if(IsLoggedIn) {
+                <NavLink class="nav-link" href="logout">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Logout
+                </NavLink>
+            } 
+            else
+            {
+                <NavLink class="nav-link" href="login">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Login
+                </NavLink>
+            }
+        </li>
     </ul>
 </div>
 
@@ -38,5 +52,15 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState {get;set;}
+
+    public bool IsLoggedIn { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoggedIn = (await AuthenticationState)?.User?.Identity?.IsAuthenticated ?? false;
     }
 }

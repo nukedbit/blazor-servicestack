@@ -87,56 +87,56 @@ namespace MyApp
             public bool IsClosed { get; } = false;
             public bool KeepAlive { get; set; }
             public bool HasStarted { get; }
-            public Dictionary<string, object> Items { get; }
+            public Dictionary<string, object> Items { get; } = new Dictionary<string, object>();
 
             public void AddHeader(string name, string value)
             {
-                throw new NotImplementedException();
+                
             }
 
             public void Close()
             {
-                throw new NotImplementedException();
+                
             }
 
             public Task CloseAsync(CancellationToken token = default)
             {
-                throw new NotImplementedException();
+                return Task.CompletedTask;
             }
 
             public void End()
             {
-                throw new NotImplementedException();
+
             }
 
             public void Flush()
             {
-                throw new NotImplementedException();
+
             }
 
             public Task FlushAsync(CancellationToken token = default)
             {
-                throw new NotImplementedException();
+                return Task.CompletedTask;
             }
 
             public string GetHeader(string name)
             {
-                throw new NotImplementedException();
+                return null;
             }
 
             public void Redirect(string url)
             {
-                throw new NotImplementedException();
+
             }
 
             public void RemoveHeader(string name)
             {
-                throw new NotImplementedException();
+              
             }
 
             public void SetContentLength(long contentLength)
             {
-                throw new NotImplementedException();
+              
             }
         }
 

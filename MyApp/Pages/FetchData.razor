@@ -2,8 +2,7 @@
 @using MyApp.ServiceModel
 @using MyApp.ServiceModel.Types
 @using ServiceStack
-@*@attribute [Authorize(Roles = "Admin")]*@
-@inject AuthenticationStateProvider AuthenticationStateProvider;
+@attribute [Authorize(Roles = "Admin")]
 
 <h1>Weather forecast</h1>
 
@@ -48,9 +47,9 @@ else
     public Task<AuthenticationState> AuthenticationState {get;set;}
 
     protected override async Task OnInitializedAsync()
-    {  
-        
-        forecasts = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync<List<WeatherForecast>>(new GetWeatherForecast()
+    {
+        var state = await AuthenticationState;
+        forecasts = await this.GetServiceStackClient(state).GetAsync<List<WeatherForecast>>(new GetWeatherForecast()
         {
             StartDate = DateTime.Now
         });
@@ -59,7 +58,8 @@ else
 
     public async void Reload()
     {
-        forecasts = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync(new GetWeatherForecast()
+        var state = await AuthenticationState;
+        forecasts = await this.GetServiceStackClient(state).GetAsync(new GetWeatherForecast()
         {
             StartDate = DateTime.Now
         });

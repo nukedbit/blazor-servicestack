@@ -25,11 +25,11 @@ namespace MyApp
 
     public partial class ServiceStackClient : IServiceStackClient
     {
-        private AuthenticationStateProvider provider;
+        private AuthenticationState state;
 
-        public ServiceStackClient(AuthenticationStateProvider provider)
+        public ServiceStackClient(AuthenticationState state)
         {
-            this.provider = provider;
+            this.state = state;
         }
 
         private static IServiceGatewayAsync GetServiceGateway(IRequest request)
@@ -41,10 +41,8 @@ namespace MyApp
             return HostContext.AppHost.GetServiceGateway(request) as IServiceGatewayAsync;
         }
 
-        private async Task<IRequest> GetRequestWithStateAsync(string verb = "GET")
+        private IRequest GetRequestWithState(string verb = "GET")
         {
-            var state = await provider.GetAuthenticationStateAsync();
-
             var httpRequest = new BlazorFakeHttpRequest(new BlazorFakeHttpContext(state.User));
             return new BlazorRequest(httpRequest, verb);
         }
@@ -66,7 +64,7 @@ namespace MyApp
 
         private async Task SendAsync(IReturnVoid requestDto, string verb, CancellationToken token = default)
         {
-            var request = await GetRequestWithStateAsync(verb);
+            var request = GetRequestWithState(verb);
             var gateway = GetServiceGateway(request);
             await HostContext.AppHost.ApplyPreAuthenticateFiltersAsync(request, request.Response);
             await HostContext.ApplyRequestFiltersAsync(request, request.Response, requestDto);
@@ -75,7 +73,7 @@ namespace MyApp
 
         private async Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto, string verb, CancellationToken token = default)
         {
-            var request = await GetRequestWithStateAsync(verb);
+            var request = GetRequestWithState(verb);
             var gateway = GetServiceGateway(request);
             await HostContext.AppHost.ApplyPreAuthenticateFiltersAsync(request, request.Response);
             await HostContext.ApplyRequestFiltersAsync(request, request.Response, requestDto);
