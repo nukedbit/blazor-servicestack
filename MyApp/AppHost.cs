@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using MyApp.ServiceInterface;
 using ServiceStack;
 using ServiceStack.Caching;
+using ServiceStack.Validation;
 
 namespace MyApp
 {
@@ -15,6 +16,7 @@ namespace MyApp
         {
             container.RegisterAs<OrmLiteCacheClient, ICacheClient>();
             container.Resolve<ICacheClient>().InitSchema();
+            Plugins.Add(new ValidationFeature());
             Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
             Plugins.Add(new PostmanFeature());
 
@@ -26,6 +28,7 @@ namespace MyApp
             });
 
             Plugins.Add(new CorsFeature());
+           
         }
     }
 }

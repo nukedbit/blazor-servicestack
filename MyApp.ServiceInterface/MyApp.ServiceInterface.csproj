@@ -1,14 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ServiceStack" Version="5.10.5" />
-    <PackageReference Include="ServiceStack.OrmLite" Version="5.10.4" />
-  </ItemGroup>
-
+	<!--ItemGroup>
+    <PackageReference Include="ServiceStack" Version="5.11.1" />
+    <PackageReference Include="ServiceStack.OrmLite" Version="5.11.1" />
+  </ItemGroup -->
+	<ItemGroup>
+		<ProjectReference Include="..\..\ServiceStack\src\ServiceStack\ServiceStack.Source.csproj"></ProjectReference>
+		<ProjectReference Include="..\..\ServiceStack.OrmLite\src\ServiceStack.OrmLite\ServiceStack.OrmLite.Source.csproj"></ProjectReference>
+		
+	</ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyApp.ServiceModel\MyApp.ServiceModel.csproj" />
   </ItemGroup>

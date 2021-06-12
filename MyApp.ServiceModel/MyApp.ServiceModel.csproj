@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ServiceStack" Version="5.10.5" />
-    <PackageReference Include="ServiceStack.Interfaces" Version="5.10.5" />
-  </ItemGroup>
+	<!-- ItemGroup>
+    <PackageReference Include="ServiceStack" Version="5.11.1" />
+    <PackageReference Include="ServiceStack.Interfaces" Version="5.11.1" />
+  </ItemGroup -->
 
-  <ItemGroup>
-    <Folder Include="Types\" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\..\ServiceStack\src\ServiceStack\ServiceStack.Source.csproj"></ProjectReference>
+		<ProjectReference Include="..\..\ServiceStack\src\ServiceStack.Interfaces\ServiceStack.Interfaces.csproj"></ProjectReference>
+		
+	</ItemGroup>
 </Project>

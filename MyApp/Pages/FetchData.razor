@@ -2,7 +2,7 @@
 @using MyApp.ServiceModel
 @using MyApp.ServiceModel.Types
 @using ServiceStack
-@attribute [Authorize(Roles = "Admin")]
+@*@attribute [Authorize(Roles = "Admin")]*@
 
 <h1>Weather forecast</h1>
 
@@ -16,6 +16,7 @@
 }
 else
 {
+    <button class="btn btn-primary mb-3" @onclick="Reload">Reload</button>
     <table class="table">
         <thead>
         <tr>
@@ -43,13 +44,22 @@ else
     private List<WeatherForecast> forecasts = new List<WeatherForecast>();
 
     [CascadingParameter]
-    public Task<AuthenticationState> AuthenticationState {get;set;}    
+    public Task<AuthenticationState> AuthenticationState {get;set;}
 
     protected override async Task OnInitializedAsync()
+    {  
+        forecasts = await this.GetServiceGateway().SendAsync<List<WeatherForecast>>(new GetWeatherForecast()
+        {
+            StartDate = DateTime.Now
+        });
+    }
+
+
+    public async void Reload()
     {
-        var state = await AuthenticationState;
-        var client = state.ToClient();
-        forecasts = await client.GetAsync(new GetWeatherForecast()
+        var request = HostContext.AppHost.TryGetCurrentRequest();
+        var session = await request.GetSessionAsync();
+        forecasts = await this.GetServiceGateway(request).SendAsync(new GetWeatherForecast()
         {
             StartDate = DateTime.Now
         });
