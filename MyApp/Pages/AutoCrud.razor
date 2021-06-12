@@ -18,8 +18,8 @@
 else
 {
     <button class="btn btn-primary mb-3 mr-3" @onclick="AddNew">Add New</button>
-    <button class="btn btn-primary mb-3" @onclick="AddNewWithFakeRole">Try Add require fake role</button>
-    
+    <button class="btn btn-primary mb-3 mr-3" @onclick="AddNewWithFakeRole">Try Add require fake role</button>
+     <button class="btn btn-primary mb-3" @onclick="ClearLogs">Clear Logs</button>
 @if (!String.IsNullOrEmpty(ErrorMessage))
 {
     <div class="alert alert-danger" role="alert">
@@ -81,6 +81,20 @@ else
         try
         {
             await this.SendAsync(AuthenticationStateProvider, new CreateLogClickRequireFakeRole());
+
+            var response = await this.SendAsync(AuthenticationStateProvider, new QueryLogClicks());
+            records = response.Results;
+        }catch(Exception ex)
+        {
+            ErrorMessage = ex.ToString();
+        }
+    }
+
+    public async void ClearLogs()
+    {
+        try
+        {
+            await this.GetServiceStackClient(AuthenticationStateProvider).DeleteAsync(new ClearAllLogClick());
 
             var response = await this.SendAsync(AuthenticationStateProvider, new QueryLogClicks());
             records = response.Results;

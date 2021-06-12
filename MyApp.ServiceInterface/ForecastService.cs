@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ServiceStack;
 using MyApp.ServiceModel;
 using MyApp.ServiceModel.Types;
+using ServiceStack.OrmLite;
 
 namespace MyApp.ServiceInterface
 {

@@ -27,8 +27,6 @@ namespace MyApp
 
         public static async Task<TResponse> SendAsync<TResponse>(this IComponent cmp, AuthenticationStateProvider provider, IReturn<TResponse> requestDto, CancellationToken token = default)
         {
-
-           
             var request = await cmp.GetRequestAsync(provider);
             var gateway = cmp.GetServiceGateway(request);
             //   var session = await request.GetSessionAsync(true);
@@ -41,5 +39,17 @@ namespace MyApp
             return response;
         }
 
+
+        public static async Task SendAsync(this IComponent cmp, AuthenticationStateProvider provider, IReturnVoid requestDto, CancellationToken token = default)
+        {
+            var request = await cmp.GetRequestAsync(provider);
+            var gateway = cmp.GetServiceGateway(request);
+            //   var session = await request.GetSessionAsync(true);
+
+
+            await HostContext.AppHost.ApplyPreAuthenticateFiltersAsync(request, request.Response);
+            await HostContext.ApplyRequestFiltersAsync(request, request.Response, requestDto);
+            await gateway.SendAsync<string>(requestDto); 
+        }
     }
 }

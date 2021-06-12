@@ -143,9 +143,10 @@ namespace MyApp
     {
         private readonly HttpRequest httpRequest;
 
-        public BlazorRequest(HttpRequest httpRequest)
+        public BlazorRequest(HttpRequest httpRequest, string verb = "GET")
         {
             this.httpRequest = httpRequest;
+            Verb = verb;
         }
 
        
@@ -154,7 +155,7 @@ namespace MyApp
 
         public IResponse Response { get; } = new BlazorResponse();
         public string OperationName { get; set; }
-        public string Verb { get; }
+        public string Verb { get; set; }
         public RequestAttributes RequestAttributes { get; set; }
         public IRequestPreferences RequestPreferences { get; }
         public object Dto { get; set; }

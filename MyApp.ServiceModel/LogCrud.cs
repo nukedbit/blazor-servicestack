@@ -26,4 +26,7 @@ namespace MyApp.ServiceModel
     [ValidateIsAuthenticated]
     [ValidateHasRole("fake")]
     public class CreateLogClickRequireFakeRole : ICreateDb<LogClick>, IReturn<CreateLogClickResponse> { }
+
+    [ValidateIsAuthenticated]
+    public class ClearAllLogClick : IReturnVoid { }
 }
