@@ -1,6 +1,10 @@
 # Blazor Server Size with Service Stack
 
-.NET Core 3.1 Blazor Server Size with Service Stack
+.NET 6 Blazor Server Size with Service Stack.
+
+This template has been updated for .NET 6 preview 4, and there is a new way to interact with ServiceStack services.
+On this template there is a prototype of a ServiceStack Client Proxy which emulate IRequest by providing a fake request, to make AutoCrud work.
+
 
 Based on [selfhost template](https://github.com/NetCoreTemplates/selfhost)
 
