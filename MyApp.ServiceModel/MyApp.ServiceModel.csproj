@@ -4,14 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
-	<!-- ItemGroup>
+  <ItemGroup>
     <PackageReference Include="ServiceStack" Version="5.11.1" />
     <PackageReference Include="ServiceStack.Interfaces" Version="5.11.1" />
-  </ItemGroup -->
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\ServiceStack\src\ServiceStack\ServiceStack.Source.csproj"></ProjectReference>
-		<ProjectReference Include="..\..\ServiceStack\src\ServiceStack.Interfaces\ServiceStack.Interfaces.csproj"></ProjectReference>
-		
-	</ItemGroup>
+  </ItemGroup>
 </Project>

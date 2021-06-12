@@ -10,18 +10,11 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.*" />
-		<!-- 
+		 
 		<PackageReference Include="ServiceStack" Version="5.11.1" />
 		<PackageReference Include="ServiceStack.OrmLite.Sqlite" Version="5.11.1" />
-		<PackageReference Include="ServiceStack.Server" Version="5.11.1" />-->
+		<PackageReference Include="ServiceStack.Server" Version="5.11.1" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\ServiceStack\src\ServiceStack\ServiceStack.Source.csproj"></ProjectReference>
-		<ProjectReference Include="..\..\ServiceStack.OrmLite\src\ServiceStack.OrmLite.SqLite\ServiceStack.OrmLite.SqLite.Source.csproj"></ProjectReference>
-		<ProjectReference Include="..\..\ServiceStack\src\ServiceStack.Server\ServiceStack.Server.Source.csproj"></ProjectReference>
-	</ItemGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\MyApp.ServiceInterface\MyApp.ServiceInterface.csproj" />
 		<ProjectReference Include="..\MyApp.ServiceModel\MyApp.ServiceModel.csproj" />
