@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components.Authorization;
 using ServiceStack;
 using ServiceStack.Web;
 using System;
@@ -13,10 +12,18 @@ namespace MyApp
 {
     public interface IServiceStackClient
     {
+        public Task PostAsync(IReturnVoid requestDto, CancellationToken token = default);
+        public Task PutAsync(IReturnVoid requestDto, CancellationToken token = default);
         public Task DeleteAsync(IReturnVoid requestDto, CancellationToken token = default);
+
+
+        public Task<TResponse> GetAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default);
+        public Task<TResponse> PostAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default);
+        public Task<TResponse> PutAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default);
+        public Task<TResponse> DeleteAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default);
     }
 
-    public class ServiceStackClient : IServiceStackClient
+    public partial class ServiceStackClient : IServiceStackClient
     {
         private AuthenticationStateProvider provider;
 
@@ -44,22 +51,55 @@ namespace MyApp
 
         public async Task DeleteAsync(IReturnVoid requestDto, CancellationToken token = default)
         {
-            var request = await GetRequestWithStateAsync("DELETE");
-            var gateway = GetServiceGateway(request); 
-
-
-            await HostContext.AppHost.ApplyPreAuthenticateFiltersAsync(request, request.Response);
-            await HostContext.ApplyRequestFiltersAsync(request, request.Response, requestDto);
-            await gateway.SendAsync<string>(requestDto);
+            await SendAsync(requestDto, "DELETE", token);
         }
 
-    }
-
-    public static class ComponentExtensions2
-    {
-        public static  IServiceStackClient GetServiceStackClient(this ComponentBase _, AuthenticationStateProvider provider)
+        public async Task PutAsync(IReturnVoid requestDto, CancellationToken token = default)
         {
-            return new ServiceStackClient(provider);
+            await SendAsync(requestDto, "PUT", token);
+        }
+
+        public async Task PostAsync(IReturnVoid requestDto, CancellationToken token = default)
+        {
+            await SendAsync(requestDto, "POST", token);
+        }
+
+        private async Task SendAsync(IReturnVoid requestDto, string verb, CancellationToken token = default)
+        {
+            var request = await GetRequestWithStateAsync(verb);
+            var gateway = GetServiceGateway(request);
+            await HostContext.AppHost.ApplyPreAuthenticateFiltersAsync(request, request.Response);
+            await HostContext.ApplyRequestFiltersAsync(request, request.Response, requestDto);
+            await gateway.SendAsync<string>(requestDto, token);
+        }
+
+        private async Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto, string verb, CancellationToken token = default)
+        {
+            var request = await GetRequestWithStateAsync(verb);
+            var gateway = GetServiceGateway(request);
+            await HostContext.AppHost.ApplyPreAuthenticateFiltersAsync(request, request.Response);
+            await HostContext.ApplyRequestFiltersAsync(request, request.Response, requestDto);
+            return await gateway.SendAsync<TResponse>(requestDto, token);
+        }
+
+        public async Task<TResponse> GetAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default)
+        {
+            return await SendAsync(requestDto, "GET", token);
+        }
+
+        public async Task<TResponse> PostAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default)
+        {
+            return await SendAsync(requestDto, "POST", token);
+        }
+
+        public async Task<TResponse> PutAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default)
+        {
+            return await SendAsync(requestDto, "PUT", token);
+        }
+
+        public async Task<TResponse> DeleteAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default)
+        {
+            return await SendAsync(requestDto, "DELETE", token);
         }
     }
 }

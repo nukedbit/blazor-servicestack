@@ -3,6 +3,7 @@
 @using MyApp.ServiceModel.Types
 @using ServiceStack
 @*@attribute [Authorize(Roles = "Admin")]*@
+@inject AuthenticationStateProvider AuthenticationStateProvider;
 
 <h1>Weather forecast</h1>
 
@@ -48,7 +49,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {  
-        forecasts = await this.GetServiceGateway().SendAsync<List<WeatherForecast>>(new GetWeatherForecast()
+        
+        forecasts = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync<List<WeatherForecast>>(new GetWeatherForecast()
         {
             StartDate = DateTime.Now
         });
@@ -57,9 +59,7 @@ else
 
     public async void Reload()
     {
-        var request = HostContext.AppHost.TryGetCurrentRequest();
-        var session = await request.GetSessionAsync();
-        forecasts = await this.GetServiceGateway(request).SendAsync(new GetWeatherForecast()
+        forecasts = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync(new GetWeatherForecast()
         {
             StartDate = DateTime.Now
         });

@@ -56,33 +56,48 @@ else
     [CascadingParameter]
     public Task<AuthenticationState> AuthenticationState {get;set;}
 
-    public string ErrorMessage { get; set; }  
+    public string ErrorMessage { get; set; }
 
     protected override async Task OnInitializedAsync()
-    {  
-        var response = await this.SendAsync(AuthenticationStateProvider, new QueryLogClicks());
-        records = response.Results;
+    {
+        try
+        {
+            ErrorMessage = null;
+            var response = await this.GetServiceStackClient(AuthenticationStateProvider).PostAsync(new QueryLogClicks());
+            records = response.Results;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.ToString();
+        }
     }
 
 
     public async void AddNew()
     {
-       // var request = await this.GetRequestAsync(AuthenticationStateProvider); 
-        // HostContext.AppHost.TryGetCurrentRequest();
-        //var session = await request.GetSessionAsync();
-        await this.SendAsync(AuthenticationStateProvider, new CreateLogClick());
+        try
+        {
+            ErrorMessage = null;
 
-        var response = await this.SendAsync(AuthenticationStateProvider, new QueryLogClicks());
-        records = response.Results;
+            await this.GetServiceStackClient(AuthenticationStateProvider).PostAsync(new CreateLogClick());
+
+            var response = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync(new QueryLogClicks());
+            records = response.Results;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.ToString();
+        }
     }
 
     public async void AddNewWithFakeRole()
     {
         try
         {
-            await this.SendAsync(AuthenticationStateProvider, new CreateLogClickRequireFakeRole());
+            ErrorMessage = null;
+            await this.GetServiceStackClient(AuthenticationStateProvider).PostAsync(new CreateLogClickRequireFakeRole());
 
-            var response = await this.SendAsync(AuthenticationStateProvider, new QueryLogClicks());
+            var response = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync(new QueryLogClicks());
             records = response.Results;
         }catch(Exception ex)
         {
@@ -94,9 +109,10 @@ else
     {
         try
         {
+            ErrorMessage = null;
             await this.GetServiceStackClient(AuthenticationStateProvider).DeleteAsync(new ClearAllLogClick());
 
-            var response = await this.SendAsync(AuthenticationStateProvider, new QueryLogClicks());
+            var response = await this.GetServiceStackClient(AuthenticationStateProvider).GetAsync(new QueryLogClicks());
             records = response.Results;
         }catch(Exception ex)
         {
