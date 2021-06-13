@@ -4,6 +4,7 @@
 @using ServiceStack
 @using System.IO
 @using ServiceStack.Host
+@using ServiceStack.Web
 @attribute [Authorize(Roles = "Admin")]
 
 <h1>Images Upload</h1>
@@ -69,24 +70,25 @@ else
     
     private async void LoadFiles(InputFileChangeEventArgs e)
     {
-        List<HttpFile> httpFiles = new();
-        foreach(var browserFile in e.GetMultipleFiles())
+        try
         {
-            var strm = await browserFile.OpenReadStream(long.MaxValue).CopyToNewMemoryStreamAsync();
-            httpFiles.Add(new HttpFile()
+            ErrorMessage = null;
+            List<IHttpFile> httpFiles = new();
+            foreach(var browserFile in e.GetMultipleFiles())
             {
-                FileName = browserFile.Name,
-                ContentLength = strm.Length,
-                ContentType = browserFile.ContentType,
-                InputStream = strm
-            });            
-        }
+                httpFiles.Add(await browserFile.ToHttpFileAsync());            
+            }
 
-        await this.GetServiceStackClient(await AuthenticationState).PostWithFilesAsync(new FileUpload(), httpFiles.ToArray());
+            await this.GetServiceStackClient(await AuthenticationState).PostWithFilesAsync(new FileUpload(), httpFiles.ToArray());
   
-        var response = await this.GetServiceStackClient(await AuthenticationState).GetAsync(new ListAllFiles());
-        Files = response.Files;
-        StateHasChanged();
+            var response = await this.GetServiceStackClient(await AuthenticationState).GetAsync(new ListAllFiles());
+            Files = response.Files;
+            StateHasChanged();
+         }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.ToString();
+        }
     }
 
 }

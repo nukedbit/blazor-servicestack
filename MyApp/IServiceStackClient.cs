@@ -16,14 +16,14 @@ namespace MyApp
         public Task PutAsync(IReturnVoid requestDto, CancellationToken token = default);
         public Task DeleteAsync(IReturnVoid requestDto, CancellationToken token = default);
 
-        public Task PostWithFilesAsync(IReturnVoid requestDto, IHttpFile[] files, CancellationToken token = default);
+        public Task PostWithFilesAsync(IReturnVoid requestDto, IEnumerable<IHttpFile> files, CancellationToken token = default);
 
         public Task<TResponse> GetAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default);
         public Task<TResponse> PostAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default);
         public Task<TResponse> PutAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default);
         public Task<TResponse> DeleteAsync<TResponse>(IReturn<TResponse> requestDto, CancellationToken token = default);
 
-        public Task<TResponse> PostWithFilesAsync<TResponse>(IReturn<TResponse> requestDto, IHttpFile[] files, CancellationToken token = default);
+        public Task<TResponse> PostWithFilesAsync<TResponse>(IReturn<TResponse> requestDto, IEnumerable<IHttpFile> files, CancellationToken token = default);
     }
 
     public partial class ServiceStackClient : IServiceStackClient
@@ -103,14 +103,14 @@ namespace MyApp
             return await SendAsync(requestDto, "DELETE", null, token);
         }
 
-        public async Task<TResponse> PostWithFilesAsync<TResponse>(IReturn<TResponse> requestDto, IHttpFile[] files, CancellationToken token = default)
+        public async Task<TResponse> PostWithFilesAsync<TResponse>(IReturn<TResponse> requestDto, IEnumerable<IHttpFile> files, CancellationToken token = default)
         {
-            return await SendAsync(requestDto, "POST", files, token);
+            return await SendAsync(requestDto, "POST", files.ToArray(), token);
         }
 
-        public async Task PostWithFilesAsync(IReturnVoid requestDto, IHttpFile[] files, CancellationToken token = default)
+        public async Task PostWithFilesAsync(IReturnVoid requestDto, IEnumerable<IHttpFile> files, CancellationToken token = default)
         {
-            await SendAsync(requestDto, "POST", files, token);
+            await SendAsync(requestDto, "POST", files.ToArray(), token);
         }
     }
 }
