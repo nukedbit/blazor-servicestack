@@ -4,11 +4,15 @@ using MyApp.ServiceInterface;
 using ServiceStack;
 using ServiceStack.Caching;
 using ServiceStack.Validation;
+using ServiceStack.VirtualPath;
+using System.IO;
 
 namespace MyApp
 {
     public class AppHost : AppHostBase
     {
+        private const string UploadFolder = "./uploads";
+
         public AppHost()
             : base("MyApp", typeof(ForecastService).Assembly) { }
 
@@ -28,7 +32,11 @@ namespace MyApp
             });
 
             Plugins.Add(new CorsFeature());
-           
+            if(Directory.Exists(UploadFolder) is false)
+            {
+                Directory.CreateDirectory(UploadFolder);
+            }
+            AddVirtualFileSources.Add(new FileSystemMapping("uploads", UploadFolder));
         }
     }
 }

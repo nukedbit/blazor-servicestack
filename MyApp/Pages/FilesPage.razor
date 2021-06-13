@@ -1,0 +1,92 @@
+﻿@page "/images"
+@using MyApp.ServiceModel
+@using MyApp.ServiceModel.Types
+@using ServiceStack
+@using System.IO
+@using ServiceStack.Host
+@attribute [Authorize(Roles = "Admin")]
+
+<h1>Images Upload</h1>
+
+<p>Using ServiceStack Client for Blazor Server Side for doing file uploads</p>
+<InputFile OnChange="@LoadFiles" multiple class="mb-3" />
+@if (Files == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{ 
+
+@if (!String.IsNullOrEmpty(ErrorMessage))
+{ 
+    <div class="alert alert-danger" role="alert">
+      @ErrorMessage
+    </div>
+}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Picture</th>
+            <th>FileName</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var file in Files)
+        {
+            <tr>
+                <td><img src="/uploads/@file" class="img-thumbnail" /></td>
+                <td>@file</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    public List<string> Files { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState {get;set;}
+
+    public string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ErrorMessage = null;
+            var response = await this.GetServiceStackClient(await AuthenticationState).GetAsync(new ListAllFiles());
+            Files = response.Files;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.ToString();
+        }
+    }   
+    
+    private async void LoadFiles(InputFileChangeEventArgs e)
+    {
+        List<HttpFile> httpFiles = new();
+        foreach(var browserFile in e.GetMultipleFiles())
+        {
+            var strm = await browserFile.OpenReadStream(long.MaxValue).CopyToNewMemoryStreamAsync();
+            httpFiles.Add(new HttpFile()
+            {
+                FileName = browserFile.Name,
+                ContentLength = strm.Length,
+                ContentType = browserFile.ContentType,
+                InputStream = strm
+            });            
+        }
+
+        await this.GetServiceStackClient(await AuthenticationState).PostWithFilesAsync(new FileUpload(), httpFiles.ToArray());
+  
+        var response = await this.GetServiceStackClient(await AuthenticationState).GetAsync(new ListAllFiles());
+        Files = response.Files;
+        StateHasChanged();
+    }
+
+}

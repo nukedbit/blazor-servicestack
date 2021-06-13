@@ -144,11 +144,12 @@ namespace MyApp
         {
             private readonly HttpRequest httpRequest;
 
-            public BlazorRequest(HttpRequest httpRequest, string verb = "GET", object dto = null)
+            public BlazorRequest(HttpRequest httpRequest, string verb = "GET", IHttpFile[] files = null,  object dto = null)
             {
                 this.httpRequest = httpRequest;
                 Verb = verb;
                 Dto = dto;
+                Files = files ?? new IHttpFile[0];
             }
 
             public object OriginalRequest => httpRequest;
@@ -181,7 +182,7 @@ namespace MyApp
             public string OriginalPathInfo { get; }
             public Stream InputStream { get; }
             public long ContentLength { get; }
-            public IHttpFile[] Files { get; } = new IHttpFile[0];
+            public IHttpFile[] Files { get; }
             public Uri UrlReferrer { get; }
 
             public string GetRawBody()
